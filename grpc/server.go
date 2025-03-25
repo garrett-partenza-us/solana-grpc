@@ -1,7 +1,6 @@
 package grpc
 
 import (
-	"log"
 	"context"
 
 	"github.com/garrett-partenza-us/solana-grpc/proto"
@@ -15,9 +14,17 @@ type Server struct {
 
 func (s *Server) GetLatestBlockHash(ctx context.Context, in *proto.GetLatestBlockHashRequest) (*proto.GetLatestBlockHashResponse, error) {
 	jsonResponse := methods.GetLatestBlockHashJSONRPC()
-	log.Println(jsonResponse)
 	return &proto.GetLatestBlockHashResponse{
 		Blockhash: jsonResponse.Result.Value.Blockhash,
 		LastValidBlockHeight: jsonResponse.Result.Value.LastValidBlockHeight,
 	}, nil
+}
+
+func (s *Server) GetAccountBalance(ctx context.Context, in *proto.GetAccountBalanceRequest) (*proto.GetAccountBalanceResponse, error) {
+	jsonResponse := methods.GetAccountBalanceJSONRPC(in.Account)
+	return &proto.GetAccountBalanceResponse{
+		Slot: jsonResponse.Result.Context.Slot,
+		Value: jsonResponse.Result.Value,
+	}, nil
+
 }

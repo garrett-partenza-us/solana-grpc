@@ -4,13 +4,24 @@ package proto;
 
 option go_package = "./proto";
 
+// Solana Service gRPC interface
 service SolanaService {
 	rpc GetLatestBlockHash (GetLatestBlockHashRequest) returns (GetLatestBlockHashResponse);
+	rpc GetAccountBalance (GetAccountBalanceRequest) returns (GetAccountBalanceResponse);
 }
 
+// Get the latest block hash
 message GetLatestBlockHashRequest {}
-
 message GetLatestBlockHashResponse {
 	string blockhash = 1;
-	int32 last_valid_block_height = 2;
+	int64 last_valid_block_height = 2;
+}
+
+// Get the balance of an individual account
+message GetAccountBalanceRequest {
+	string account = 1;
+}
+message GetAccountBalanceResponse {
+	int64 slot = 1;
+	int64 value = 2;
 }

@@ -21,6 +21,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Get the latest block hash
 type GetLatestBlockHashRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -60,7 +61,7 @@ func (*GetLatestBlockHashRequest) Descriptor() ([]byte, []int) {
 type GetLatestBlockHashResponse struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
 	Blockhash            string                 `protobuf:"bytes,1,opt,name=blockhash,proto3" json:"blockhash,omitempty"`
-	LastValidBlockHeight int32                  `protobuf:"varint,2,opt,name=last_valid_block_height,json=lastValidBlockHeight,proto3" json:"last_valid_block_height,omitempty"`
+	LastValidBlockHeight int64                  `protobuf:"varint,2,opt,name=last_valid_block_height,json=lastValidBlockHeight,proto3" json:"last_valid_block_height,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -102,9 +103,106 @@ func (x *GetLatestBlockHashResponse) GetBlockhash() string {
 	return ""
 }
 
-func (x *GetLatestBlockHashResponse) GetLastValidBlockHeight() int32 {
+func (x *GetLatestBlockHashResponse) GetLastValidBlockHeight() int64 {
 	if x != nil {
 		return x.LastValidBlockHeight
+	}
+	return 0
+}
+
+// Get the balance of an individual account
+type GetAccountBalanceRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Account       string                 `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAccountBalanceRequest) Reset() {
+	*x = GetAccountBalanceRequest{}
+	mi := &file_proto_solana_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAccountBalanceRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAccountBalanceRequest) ProtoMessage() {}
+
+func (x *GetAccountBalanceRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_solana_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAccountBalanceRequest.ProtoReflect.Descriptor instead.
+func (*GetAccountBalanceRequest) Descriptor() ([]byte, []int) {
+	return file_proto_solana_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *GetAccountBalanceRequest) GetAccount() string {
+	if x != nil {
+		return x.Account
+	}
+	return ""
+}
+
+type GetAccountBalanceResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Slot          int64                  `protobuf:"varint,1,opt,name=slot,proto3" json:"slot,omitempty"`
+	Value         int64                  `protobuf:"varint,2,opt,name=value,proto3" json:"value,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAccountBalanceResponse) Reset() {
+	*x = GetAccountBalanceResponse{}
+	mi := &file_proto_solana_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAccountBalanceResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAccountBalanceResponse) ProtoMessage() {}
+
+func (x *GetAccountBalanceResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_solana_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAccountBalanceResponse.ProtoReflect.Descriptor instead.
+func (*GetAccountBalanceResponse) Descriptor() ([]byte, []int) {
+	return file_proto_solana_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *GetAccountBalanceResponse) GetSlot() int64 {
+	if x != nil {
+		return x.Slot
+	}
+	return 0
+}
+
+func (x *GetAccountBalanceResponse) GetValue() int64 {
+	if x != nil {
+		return x.Value
 	}
 	return 0
 }
@@ -117,9 +215,15 @@ const file_proto_solana_proto_rawDesc = "" +
 	"\x19GetLatestBlockHashRequest\"q\n" +
 	"\x1aGetLatestBlockHashResponse\x12\x1c\n" +
 	"\tblockhash\x18\x01 \x01(\tR\tblockhash\x125\n" +
-	"\x17last_valid_block_height\x18\x02 \x01(\x05R\x14lastValidBlockHeight2j\n" +
+	"\x17last_valid_block_height\x18\x02 \x01(\x03R\x14lastValidBlockHeight\"4\n" +
+	"\x18GetAccountBalanceRequest\x12\x18\n" +
+	"\aaccount\x18\x01 \x01(\tR\aaccount\"E\n" +
+	"\x19GetAccountBalanceResponse\x12\x12\n" +
+	"\x04slot\x18\x01 \x01(\x03R\x04slot\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\x03R\x05value2\xc2\x01\n" +
 	"\rSolanaService\x12Y\n" +
-	"\x12GetLatestBlockHash\x12 .proto.GetLatestBlockHashRequest\x1a!.proto.GetLatestBlockHashResponseB\tZ\a./protob\x06proto3"
+	"\x12GetLatestBlockHash\x12 .proto.GetLatestBlockHashRequest\x1a!.proto.GetLatestBlockHashResponse\x12V\n" +
+	"\x11GetAccountBalance\x12\x1f.proto.GetAccountBalanceRequest\x1a .proto.GetAccountBalanceResponseB\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_solana_proto_rawDescOnce sync.Once
@@ -133,16 +237,20 @@ func file_proto_solana_proto_rawDescGZIP() []byte {
 	return file_proto_solana_proto_rawDescData
 }
 
-var file_proto_solana_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_solana_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_solana_proto_goTypes = []any{
 	(*GetLatestBlockHashRequest)(nil),  // 0: proto.GetLatestBlockHashRequest
 	(*GetLatestBlockHashResponse)(nil), // 1: proto.GetLatestBlockHashResponse
+	(*GetAccountBalanceRequest)(nil),   // 2: proto.GetAccountBalanceRequest
+	(*GetAccountBalanceResponse)(nil),  // 3: proto.GetAccountBalanceResponse
 }
 var file_proto_solana_proto_depIdxs = []int32{
 	0, // 0: proto.SolanaService.GetLatestBlockHash:input_type -> proto.GetLatestBlockHashRequest
-	1, // 1: proto.SolanaService.GetLatestBlockHash:output_type -> proto.GetLatestBlockHashResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	2, // 1: proto.SolanaService.GetAccountBalance:input_type -> proto.GetAccountBalanceRequest
+	1, // 2: proto.SolanaService.GetLatestBlockHash:output_type -> proto.GetLatestBlockHashResponse
+	3, // 3: proto.SolanaService.GetAccountBalance:output_type -> proto.GetAccountBalanceResponse
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -159,7 +267,7 @@ func file_proto_solana_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_solana_proto_rawDesc), len(file_proto_solana_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

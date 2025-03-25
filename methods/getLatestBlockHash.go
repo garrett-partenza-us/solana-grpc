@@ -13,14 +13,14 @@ type getLatestBlockHashJSONRPCResponse struct {
 	Result struct {
 		Context struct {
 			APIVersion string						`json:"apiVersion"`
-			Slot int										`json:"slot"`
+			Slot int64									`json:"slot"`
 		}															`json:"context"`
 		Value struct {
 			Blockhash string						`json:"blockhash"`
-			LastValidBlockHeight int32	`json:"lastValidBlockHeight"`
+			LastValidBlockHeight int64	`json:"lastValidBlockHeight"`
 		}															`json:"value"`
 	}																`json:"result"`
-	ID int													`json:"id"`
+	ID int64												`json:"id"`
 }
 
 func GetLatestBlockHashJSONRPC() getLatestBlockHashJSONRPCResponse {
