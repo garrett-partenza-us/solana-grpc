@@ -1,31 +1,31 @@
 package methods
 
 import (
-	"log"
+	"bytes"
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
-	"bytes"
 )
 
 type getAccountBalanceJSONRPCResponse struct {
-	JSONRPC string									`json:"jsonrpc"`
-	Result struct {
+	JSONRPC string `json:"jsonrpc"`
+	Result  struct {
 		Context struct {
-			APIVersion string						`json:"apiVersion"`
-			Slot int64										`json:"slot"`
-		}															`json:"context"`
-		Value int64											`json:"value"`
-	}																`json:"result"`
-	ID int64													`json:"id"`
+			APIVersion string `json:"apiVersion"`
+			Slot       int64  `json:"slot"`
+		} `json:"context"`
+		Value int64 `json:"value"`
+	} `json:"result"`
+	ID int64 `json:"id"`
 }
 
 func GetAccountBalanceJSONRPC(account string) getAccountBalanceJSONRPCResponse {
-	request := JSONRPCRequest {
+	request := JSONRPCRequest{
 		JSONRPC: "2.0",
-		ID:				1,
-		Method:		"getBalance",
-		Params: []interface{}{account},
+		ID:      1,
+		Method:  "getBalance",
+		Params:  []interface{}{account},
 	}
 
 	reqBody, err := json.Marshal(request)

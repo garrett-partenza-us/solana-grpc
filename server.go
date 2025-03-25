@@ -1,15 +1,14 @@
 package main
 
 import (
-	"net"
 	"log"
+	"net"
 
+	solgrpc "github.com/garrett-partenza-us/solana-grpc/grpc"
+	"github.com/garrett-partenza-us/solana-grpc/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"github.com/garrett-partenza-us/solana-grpc/proto"
-	solgrpc "github.com/garrett-partenza-us/solana-grpc/grpc"
 )
-
 
 func main() {
 

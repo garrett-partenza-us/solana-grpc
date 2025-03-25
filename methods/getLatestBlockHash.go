@@ -1,34 +1,34 @@
 package methods
 
 import (
-	"log"
+	"bytes"
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
-	"bytes"
 )
 
 type getLatestBlockHashJSONRPCResponse struct {
-	JSONRPC string									`json:"jsonrpc"`
-	Result struct {
+	JSONRPC string `json:"jsonrpc"`
+	Result  struct {
 		Context struct {
-			APIVersion string						`json:"apiVersion"`
-			Slot int64									`json:"slot"`
-		}															`json:"context"`
+			APIVersion string `json:"apiVersion"`
+			Slot       int64  `json:"slot"`
+		} `json:"context"`
 		Value struct {
-			Blockhash string						`json:"blockhash"`
-			LastValidBlockHeight int64	`json:"lastValidBlockHeight"`
-		}															`json:"value"`
-	}																`json:"result"`
-	ID int64												`json:"id"`
+			Blockhash            string `json:"blockhash"`
+			LastValidBlockHeight int64  `json:"lastValidBlockHeight"`
+		} `json:"value"`
+	} `json:"result"`
+	ID int64 `json:"id"`
 }
 
 func GetLatestBlockHashJSONRPC() getLatestBlockHashJSONRPCResponse {
-	request := JSONRPCRequest {
+	request := JSONRPCRequest{
 		JSONRPC: "2.0",
-		ID:				1,
-		Method:		"getLatestBlockhash",
-		Params: []interface{}{},
+		ID:      1,
+		Method:  "getLatestBlockhash",
+		Params:  []interface{}{},
 	}
 
 	reqBody, err := json.Marshal(request)

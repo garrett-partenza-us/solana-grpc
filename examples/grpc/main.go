@@ -1,10 +1,10 @@
 package main
 
 import (
-	"log"
 	"context"
-	"google.golang.org/grpc"
 	"github.com/garrett-partenza-us/solana-grpc/proto"
+	"google.golang.org/grpc"
+	"log"
 )
 
 func main() {
