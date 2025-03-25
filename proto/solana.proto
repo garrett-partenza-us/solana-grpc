@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./proto";
+
+service SolanaService {
+	rpc GetLatestBlockHash (GetLatestBlockHashRequest) returns (GetLatestBlockHashResponse);
+}
+
+message GetLatestBlockHashRequest {}
+
+message GetLatestBlockHashResponse {
+	string blockhash = 1;
+	int32 last_valid_block_height = 2;
+}
