@@ -20,7 +20,7 @@ func main() {
 
 	runGetLatestBlockHash(client)
 	runGetAccountBalance(client)
-	runGetSlotLeader(client);
+	runGetSlotLeaderStream(client);
 
 }
 
@@ -44,9 +44,9 @@ func runGetAccountBalance(client proto.SolanaServiceClient) {
 	log.Println(res)
 }
 
-func runGetSlotLeader(client proto.SolanaServiceClient) {
+func runGetSlotLeaderStream(client proto.SolanaServiceClient) {
 	req := &proto.GetSlotLeaderRequest{}
-	stream, err := client.GetSlotLeader(context.Background(), req)
+	stream, err := client.GetSlotLeaderStream(context.Background(), req)
 	if err != nil {
 		log.Fatal("Error starting slot leader stream: ", err)
 	}

@@ -1,14 +1,31 @@
 syntax = "proto3";
 
+import "google/api/annotations.proto"; // HTTP annotations
+
 package proto;
 
 option go_package = "./proto";
 
 // Solana Service gRPC interface
 service SolanaService {
-	rpc GetLatestBlockHash (GetLatestBlockHashRequest) returns (GetLatestBlockHashResponse);
-	rpc GetAccountBalance (GetAccountBalanceRequest) returns (GetAccountBalanceResponse);
-	rpc GetSlotLeader (GetSlotLeaderRequest) returns (stream GetSlotLeaderResponse);
+	rpc GetLatestBlockHash (GetLatestBlockHashRequest) returns (GetLatestBlockHashResponse){
+		option (google.api.http) = {
+			get: "/v1/getLatestBlockHash"
+		};
+	};
+	rpc GetAccountBalance (GetAccountBalanceRequest) returns (GetAccountBalanceResponse){
+		option (google.api.http) = {
+			post: "/v1/getAccountBalance"
+			body: "*"
+		};
+	};
+	rpc GetSlotLeader (GetSlotLeaderRequest) returns (GetSlotLeaderResponse){
+		option (google.api.http) = {
+			post: "/v1/getSlotLeader"
+			body: "*"
+		};
+	};
+	rpc GetSlotLeaderStream (GetSlotLeaderRequest) returns (stream GetSlotLeaderResponse){};
 }
 
 // Get the latest block hash

@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SolanaService_GetLatestBlockHash_FullMethodName = "/proto.SolanaService/GetLatestBlockHash"
-	SolanaService_GetAccountBalance_FullMethodName  = "/proto.SolanaService/GetAccountBalance"
-	SolanaService_GetSlotLeader_FullMethodName      = "/proto.SolanaService/GetSlotLeader"
+	SolanaService_GetLatestBlockHash_FullMethodName  = "/proto.SolanaService/GetLatestBlockHash"
+	SolanaService_GetAccountBalance_FullMethodName   = "/proto.SolanaService/GetAccountBalance"
+	SolanaService_GetSlotLeader_FullMethodName       = "/proto.SolanaService/GetSlotLeader"
+	SolanaService_GetSlotLeaderStream_FullMethodName = "/proto.SolanaService/GetSlotLeaderStream"
 )
 
 // SolanaServiceClient is the client API for SolanaService service.
@@ -32,7 +33,8 @@ const (
 type SolanaServiceClient interface {
 	GetLatestBlockHash(ctx context.Context, in *GetLatestBlockHashRequest, opts ...grpc.CallOption) (*GetLatestBlockHashResponse, error)
 	GetAccountBalance(ctx context.Context, in *GetAccountBalanceRequest, opts ...grpc.CallOption) (*GetAccountBalanceResponse, error)
-	GetSlotLeader(ctx context.Context, in *GetSlotLeaderRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GetSlotLeaderResponse], error)
+	GetSlotLeader(ctx context.Context, in *GetSlotLeaderRequest, opts ...grpc.CallOption) (*GetSlotLeaderResponse, error)
+	GetSlotLeaderStream(ctx context.Context, in *GetSlotLeaderRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GetSlotLeaderResponse], error)
 }
 
 type solanaServiceClient struct {
@@ -63,9 +65,19 @@ func (c *solanaServiceClient) GetAccountBalance(ctx context.Context, in *GetAcco
 	return out, nil
 }
 
-func (c *solanaServiceClient) GetSlotLeader(ctx context.Context, in *GetSlotLeaderRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GetSlotLeaderResponse], error) {
+func (c *solanaServiceClient) GetSlotLeader(ctx context.Context, in *GetSlotLeaderRequest, opts ...grpc.CallOption) (*GetSlotLeaderResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &SolanaService_ServiceDesc.Streams[0], SolanaService_GetSlotLeader_FullMethodName, cOpts...)
+	out := new(GetSlotLeaderResponse)
+	err := c.cc.Invoke(ctx, SolanaService_GetSlotLeader_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *solanaServiceClient) GetSlotLeaderStream(ctx context.Context, in *GetSlotLeaderRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GetSlotLeaderResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &SolanaService_ServiceDesc.Streams[0], SolanaService_GetSlotLeaderStream_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +92,7 @@ func (c *solanaServiceClient) GetSlotLeader(ctx context.Context, in *GetSlotLead
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type SolanaService_GetSlotLeaderClient = grpc.ServerStreamingClient[GetSlotLeaderResponse]
+type SolanaService_GetSlotLeaderStreamClient = grpc.ServerStreamingClient[GetSlotLeaderResponse]
 
 // SolanaServiceServer is the server API for SolanaService service.
 // All implementations must embed UnimplementedSolanaServiceServer
@@ -90,7 +102,8 @@ type SolanaService_GetSlotLeaderClient = grpc.ServerStreamingClient[GetSlotLeade
 type SolanaServiceServer interface {
 	GetLatestBlockHash(context.Context, *GetLatestBlockHashRequest) (*GetLatestBlockHashResponse, error)
 	GetAccountBalance(context.Context, *GetAccountBalanceRequest) (*GetAccountBalanceResponse, error)
-	GetSlotLeader(*GetSlotLeaderRequest, grpc.ServerStreamingServer[GetSlotLeaderResponse]) error
+	GetSlotLeader(context.Context, *GetSlotLeaderRequest) (*GetSlotLeaderResponse, error)
+	GetSlotLeaderStream(*GetSlotLeaderRequest, grpc.ServerStreamingServer[GetSlotLeaderResponse]) error
 	mustEmbedUnimplementedSolanaServiceServer()
 }
 
@@ -107,8 +120,11 @@ func (UnimplementedSolanaServiceServer) GetLatestBlockHash(context.Context, *Get
 func (UnimplementedSolanaServiceServer) GetAccountBalance(context.Context, *GetAccountBalanceRequest) (*GetAccountBalanceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAccountBalance not implemented")
 }
-func (UnimplementedSolanaServiceServer) GetSlotLeader(*GetSlotLeaderRequest, grpc.ServerStreamingServer[GetSlotLeaderResponse]) error {
-	return status.Errorf(codes.Unimplemented, "method GetSlotLeader not implemented")
+func (UnimplementedSolanaServiceServer) GetSlotLeader(context.Context, *GetSlotLeaderRequest) (*GetSlotLeaderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSlotLeader not implemented")
+}
+func (UnimplementedSolanaServiceServer) GetSlotLeaderStream(*GetSlotLeaderRequest, grpc.ServerStreamingServer[GetSlotLeaderResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method GetSlotLeaderStream not implemented")
 }
 func (UnimplementedSolanaServiceServer) mustEmbedUnimplementedSolanaServiceServer() {}
 func (UnimplementedSolanaServiceServer) testEmbeddedByValue()                       {}
@@ -167,16 +183,34 @@ func _SolanaService_GetAccountBalance_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SolanaService_GetSlotLeader_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _SolanaService_GetSlotLeader_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSlotLeaderRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SolanaServiceServer).GetSlotLeader(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SolanaService_GetSlotLeader_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SolanaServiceServer).GetSlotLeader(ctx, req.(*GetSlotLeaderRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SolanaService_GetSlotLeaderStream_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(GetSlotLeaderRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(SolanaServiceServer).GetSlotLeader(m, &grpc.GenericServerStream[GetSlotLeaderRequest, GetSlotLeaderResponse]{ServerStream: stream})
+	return srv.(SolanaServiceServer).GetSlotLeaderStream(m, &grpc.GenericServerStream[GetSlotLeaderRequest, GetSlotLeaderResponse]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type SolanaService_GetSlotLeaderServer = grpc.ServerStreamingServer[GetSlotLeaderResponse]
+type SolanaService_GetSlotLeaderStreamServer = grpc.ServerStreamingServer[GetSlotLeaderResponse]
 
 // SolanaService_ServiceDesc is the grpc.ServiceDesc for SolanaService service.
 // It's only intended for direct use with grpc.RegisterService,
@@ -193,11 +227,15 @@ var SolanaService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "GetAccountBalance",
 			Handler:    _SolanaService_GetAccountBalance_Handler,
 		},
+		{
+			MethodName: "GetSlotLeader",
+			Handler:    _SolanaService_GetSlotLeader_Handler,
+		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "GetSlotLeader",
-			Handler:       _SolanaService_GetSlotLeader_Handler,
+			StreamName:    "GetSlotLeaderStream",
+			Handler:       _SolanaService_GetSlotLeaderStream_Handler,
 			ServerStreams: true,
 		},
 	},

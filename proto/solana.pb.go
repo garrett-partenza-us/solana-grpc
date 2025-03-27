@@ -7,6 +7,7 @@
 package proto
 
 import (
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -308,7 +309,7 @@ var File_proto_solana_proto protoreflect.FileDescriptor
 
 const file_proto_solana_proto_rawDesc = "" +
 	"\n" +
-	"\x12proto/solana.proto\x12\x05proto\"\x1b\n" +
+	"\x12proto/solana.proto\x12\x05proto\x1a\x1cgoogle/api/annotations.proto\"\x1b\n" +
 	"\x19GetLatestBlockHashRequest\"q\n" +
 	"\x1aGetLatestBlockHashResponse\x12\x1c\n" +
 	"\tblockhash\x18\x01 \x01(\tR\tblockhash\x125\n" +
@@ -324,11 +325,12 @@ const file_proto_solana_proto_rawDesc = "" +
 	"commitment\x12&\n" +
 	"\x0eminContextSlot\x18\x02 \x01(\x03R\x0eminContextSlot\"/\n" +
 	"\x15GetSlotLeaderResponse\x12\x16\n" +
-	"\x06pubkey\x18\x01 \x01(\tR\x06pubkey2\x90\x02\n" +
-	"\rSolanaService\x12Y\n" +
-	"\x12GetLatestBlockHash\x12 .proto.GetLatestBlockHashRequest\x1a!.proto.GetLatestBlockHashResponse\x12V\n" +
-	"\x11GetAccountBalance\x12\x1f.proto.GetAccountBalanceRequest\x1a .proto.GetAccountBalanceResponse\x12L\n" +
-	"\rGetSlotLeader\x12\x1b.proto.GetSlotLeaderRequest\x1a\x1c.proto.GetSlotLeaderResponse0\x01B\tZ\a./protob\x06proto3"
+	"\x06pubkey\x18\x01 \x01(\tR\x06pubkey2\xc4\x03\n" +
+	"\rSolanaService\x12y\n" +
+	"\x12GetLatestBlockHash\x12 .proto.GetLatestBlockHashRequest\x1a!.proto.GetLatestBlockHashResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\x12\x16/v1/getLatestBlockHash\x12x\n" +
+	"\x11GetAccountBalance\x12\x1f.proto.GetAccountBalanceRequest\x1a .proto.GetAccountBalanceResponse\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/v1/getAccountBalance\x12h\n" +
+	"\rGetSlotLeader\x12\x1b.proto.GetSlotLeaderRequest\x1a\x1c.proto.GetSlotLeaderResponse\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/getSlotLeader\x12T\n" +
+	"\x13GetSlotLeaderStream\x12\x1b.proto.GetSlotLeaderRequest\x1a\x1c.proto.GetSlotLeaderResponse\"\x000\x01B\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_solana_proto_rawDescOnce sync.Once
@@ -355,11 +357,13 @@ var file_proto_solana_proto_depIdxs = []int32{
 	0, // 0: proto.SolanaService.GetLatestBlockHash:input_type -> proto.GetLatestBlockHashRequest
 	2, // 1: proto.SolanaService.GetAccountBalance:input_type -> proto.GetAccountBalanceRequest
 	4, // 2: proto.SolanaService.GetSlotLeader:input_type -> proto.GetSlotLeaderRequest
-	1, // 3: proto.SolanaService.GetLatestBlockHash:output_type -> proto.GetLatestBlockHashResponse
-	3, // 4: proto.SolanaService.GetAccountBalance:output_type -> proto.GetAccountBalanceResponse
-	5, // 5: proto.SolanaService.GetSlotLeader:output_type -> proto.GetSlotLeaderResponse
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
+	4, // 3: proto.SolanaService.GetSlotLeaderStream:input_type -> proto.GetSlotLeaderRequest
+	1, // 4: proto.SolanaService.GetLatestBlockHash:output_type -> proto.GetLatestBlockHashResponse
+	3, // 5: proto.SolanaService.GetAccountBalance:output_type -> proto.GetAccountBalanceResponse
+	5, // 6: proto.SolanaService.GetSlotLeader:output_type -> proto.GetSlotLeaderResponse
+	5, // 7: proto.SolanaService.GetSlotLeaderStream:output_type -> proto.GetSlotLeaderResponse
+	4, // [4:8] is the sub-list for method output_type
+	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name

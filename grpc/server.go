@@ -27,10 +27,17 @@ func (s *Server) GetAccountBalance(ctx context.Context, in *proto.GetAccountBala
 		Slot:  jsonResponse.Result.Context.Slot,
 		Value: jsonResponse.Result.Value,
 	}, nil
+}
+
+func (s *Server) GetSlotLeader(ctx context.Context, in *proto.GetSlotLeaderRequest) (*proto.GetSlotLeaderResponse, error) {
+	jsonResponse := methods.GetSlotLeaderJSONRPC()
+	return &proto.GetSlotLeaderResponse{
+		Pubkey: jsonResponse.Result,
+	}, nil
 
 }
 
-func (s *Server) GetSlotLeader(in *proto.GetSlotLeaderRequest, stream proto.SolanaService_GetSlotLeaderServer) error {
+func (s *Server) GetSlotLeaderStream(in *proto.GetSlotLeaderRequest, stream proto.SolanaService_GetSlotLeaderStreamServer) error {
 	for {
 		jsonResponse := methods.GetSlotLeaderJSONRPC()
 		response := &proto.GetSlotLeaderResponse {
