@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"context"
 	"github.com/garrett-partenza-us/solana-grpc/proto"
 	"google.golang.org/grpc"
@@ -19,6 +20,7 @@ func main() {
 
 	runGetLatestBlockHash(client)
 	runGetAccountBalance(client)
+	runGetSlotLeader(client);
 
 }
 
@@ -40,4 +42,21 @@ func runGetAccountBalance(client proto.SolanaServiceClient) {
 		log.Fatal("Could not get account balance: ", err)
 	}
 	log.Println(res)
+}
+
+func runGetSlotLeader(client proto.SolanaServiceClient) {
+	req := &proto.GetSlotLeaderRequest{}
+	stream, err := client.GetSlotLeader(context.Background(), req)
+	if err != nil {
+		log.Fatal("Error starting slot leader stream: ", err)
+	}
+	for {
+		response, err := stream.Recv()
+		if err != nil {
+			if err == io.EOF {
+				log.Println("Server has closed the connection")
+			}
+		}
+		log.Println("Recieved slot leader: ", response.Pubkey)
+	}
 }

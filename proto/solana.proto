@@ -8,6 +8,7 @@ option go_package = "./proto";
 service SolanaService {
 	rpc GetLatestBlockHash (GetLatestBlockHashRequest) returns (GetLatestBlockHashResponse);
 	rpc GetAccountBalance (GetAccountBalanceRequest) returns (GetAccountBalanceResponse);
+	rpc GetSlotLeader (GetSlotLeaderRequest) returns (stream GetSlotLeaderResponse);
 }
 
 // Get the latest block hash
@@ -24,4 +25,14 @@ message GetAccountBalanceRequest {
 message GetAccountBalanceResponse {
 	int64 slot = 1;
 	int64 value = 2;
+}
+
+// Get the slot leader
+message GetSlotLeaderRequest {
+	string commitment = 1;
+	int64 minContextSlot = 2;
+}
+
+message GetSlotLeaderResponse {
+	string pubkey = 1;
 }

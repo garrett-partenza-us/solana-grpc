@@ -207,6 +207,103 @@ func (x *GetAccountBalanceResponse) GetValue() int64 {
 	return 0
 }
 
+// Get the slot leader
+type GetSlotLeaderRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Commitment     string                 `protobuf:"bytes,1,opt,name=commitment,proto3" json:"commitment,omitempty"`
+	MinContextSlot int64                  `protobuf:"varint,2,opt,name=minContextSlot,proto3" json:"minContextSlot,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *GetSlotLeaderRequest) Reset() {
+	*x = GetSlotLeaderRequest{}
+	mi := &file_proto_solana_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSlotLeaderRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSlotLeaderRequest) ProtoMessage() {}
+
+func (x *GetSlotLeaderRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_solana_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSlotLeaderRequest.ProtoReflect.Descriptor instead.
+func (*GetSlotLeaderRequest) Descriptor() ([]byte, []int) {
+	return file_proto_solana_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *GetSlotLeaderRequest) GetCommitment() string {
+	if x != nil {
+		return x.Commitment
+	}
+	return ""
+}
+
+func (x *GetSlotLeaderRequest) GetMinContextSlot() int64 {
+	if x != nil {
+		return x.MinContextSlot
+	}
+	return 0
+}
+
+type GetSlotLeaderResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Pubkey        string                 `protobuf:"bytes,1,opt,name=pubkey,proto3" json:"pubkey,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSlotLeaderResponse) Reset() {
+	*x = GetSlotLeaderResponse{}
+	mi := &file_proto_solana_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSlotLeaderResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSlotLeaderResponse) ProtoMessage() {}
+
+func (x *GetSlotLeaderResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_solana_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSlotLeaderResponse.ProtoReflect.Descriptor instead.
+func (*GetSlotLeaderResponse) Descriptor() ([]byte, []int) {
+	return file_proto_solana_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetSlotLeaderResponse) GetPubkey() string {
+	if x != nil {
+		return x.Pubkey
+	}
+	return ""
+}
+
 var File_proto_solana_proto protoreflect.FileDescriptor
 
 const file_proto_solana_proto_rawDesc = "" +
@@ -220,10 +317,18 @@ const file_proto_solana_proto_rawDesc = "" +
 	"\aaccount\x18\x01 \x01(\tR\aaccount\"E\n" +
 	"\x19GetAccountBalanceResponse\x12\x12\n" +
 	"\x04slot\x18\x01 \x01(\x03R\x04slot\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\x03R\x05value2\xc2\x01\n" +
+	"\x05value\x18\x02 \x01(\x03R\x05value\"^\n" +
+	"\x14GetSlotLeaderRequest\x12\x1e\n" +
+	"\n" +
+	"commitment\x18\x01 \x01(\tR\n" +
+	"commitment\x12&\n" +
+	"\x0eminContextSlot\x18\x02 \x01(\x03R\x0eminContextSlot\"/\n" +
+	"\x15GetSlotLeaderResponse\x12\x16\n" +
+	"\x06pubkey\x18\x01 \x01(\tR\x06pubkey2\x90\x02\n" +
 	"\rSolanaService\x12Y\n" +
 	"\x12GetLatestBlockHash\x12 .proto.GetLatestBlockHashRequest\x1a!.proto.GetLatestBlockHashResponse\x12V\n" +
-	"\x11GetAccountBalance\x12\x1f.proto.GetAccountBalanceRequest\x1a .proto.GetAccountBalanceResponseB\tZ\a./protob\x06proto3"
+	"\x11GetAccountBalance\x12\x1f.proto.GetAccountBalanceRequest\x1a .proto.GetAccountBalanceResponse\x12L\n" +
+	"\rGetSlotLeader\x12\x1b.proto.GetSlotLeaderRequest\x1a\x1c.proto.GetSlotLeaderResponse0\x01B\tZ\a./protob\x06proto3"
 
 var (
 	file_proto_solana_proto_rawDescOnce sync.Once
@@ -237,20 +342,24 @@ func file_proto_solana_proto_rawDescGZIP() []byte {
 	return file_proto_solana_proto_rawDescData
 }
 
-var file_proto_solana_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_proto_solana_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_proto_solana_proto_goTypes = []any{
 	(*GetLatestBlockHashRequest)(nil),  // 0: proto.GetLatestBlockHashRequest
 	(*GetLatestBlockHashResponse)(nil), // 1: proto.GetLatestBlockHashResponse
 	(*GetAccountBalanceRequest)(nil),   // 2: proto.GetAccountBalanceRequest
 	(*GetAccountBalanceResponse)(nil),  // 3: proto.GetAccountBalanceResponse
+	(*GetSlotLeaderRequest)(nil),       // 4: proto.GetSlotLeaderRequest
+	(*GetSlotLeaderResponse)(nil),      // 5: proto.GetSlotLeaderResponse
 }
 var file_proto_solana_proto_depIdxs = []int32{
 	0, // 0: proto.SolanaService.GetLatestBlockHash:input_type -> proto.GetLatestBlockHashRequest
 	2, // 1: proto.SolanaService.GetAccountBalance:input_type -> proto.GetAccountBalanceRequest
-	1, // 2: proto.SolanaService.GetLatestBlockHash:output_type -> proto.GetLatestBlockHashResponse
-	3, // 3: proto.SolanaService.GetAccountBalance:output_type -> proto.GetAccountBalanceResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
+	4, // 2: proto.SolanaService.GetSlotLeader:input_type -> proto.GetSlotLeaderRequest
+	1, // 3: proto.SolanaService.GetLatestBlockHash:output_type -> proto.GetLatestBlockHashResponse
+	3, // 4: proto.SolanaService.GetAccountBalance:output_type -> proto.GetAccountBalanceResponse
+	5, // 5: proto.SolanaService.GetSlotLeader:output_type -> proto.GetSlotLeaderResponse
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -267,7 +376,7 @@ func file_proto_solana_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_solana_proto_rawDesc), len(file_proto_solana_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

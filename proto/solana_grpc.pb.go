@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	SolanaService_GetLatestBlockHash_FullMethodName = "/proto.SolanaService/GetLatestBlockHash"
 	SolanaService_GetAccountBalance_FullMethodName  = "/proto.SolanaService/GetAccountBalance"
+	SolanaService_GetSlotLeader_FullMethodName      = "/proto.SolanaService/GetSlotLeader"
 )
 
 // SolanaServiceClient is the client API for SolanaService service.
@@ -31,6 +32,7 @@ const (
 type SolanaServiceClient interface {
 	GetLatestBlockHash(ctx context.Context, in *GetLatestBlockHashRequest, opts ...grpc.CallOption) (*GetLatestBlockHashResponse, error)
 	GetAccountBalance(ctx context.Context, in *GetAccountBalanceRequest, opts ...grpc.CallOption) (*GetAccountBalanceResponse, error)
+	GetSlotLeader(ctx context.Context, in *GetSlotLeaderRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GetSlotLeaderResponse], error)
 }
 
 type solanaServiceClient struct {
@@ -61,6 +63,25 @@ func (c *solanaServiceClient) GetAccountBalance(ctx context.Context, in *GetAcco
 	return out, nil
 }
 
+func (c *solanaServiceClient) GetSlotLeader(ctx context.Context, in *GetSlotLeaderRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GetSlotLeaderResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &SolanaService_ServiceDesc.Streams[0], SolanaService_GetSlotLeader_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[GetSlotLeaderRequest, GetSlotLeaderResponse]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type SolanaService_GetSlotLeaderClient = grpc.ServerStreamingClient[GetSlotLeaderResponse]
+
 // SolanaServiceServer is the server API for SolanaService service.
 // All implementations must embed UnimplementedSolanaServiceServer
 // for forward compatibility.
@@ -69,6 +90,7 @@ func (c *solanaServiceClient) GetAccountBalance(ctx context.Context, in *GetAcco
 type SolanaServiceServer interface {
 	GetLatestBlockHash(context.Context, *GetLatestBlockHashRequest) (*GetLatestBlockHashResponse, error)
 	GetAccountBalance(context.Context, *GetAccountBalanceRequest) (*GetAccountBalanceResponse, error)
+	GetSlotLeader(*GetSlotLeaderRequest, grpc.ServerStreamingServer[GetSlotLeaderResponse]) error
 	mustEmbedUnimplementedSolanaServiceServer()
 }
 
@@ -84,6 +106,9 @@ func (UnimplementedSolanaServiceServer) GetLatestBlockHash(context.Context, *Get
 }
 func (UnimplementedSolanaServiceServer) GetAccountBalance(context.Context, *GetAccountBalanceRequest) (*GetAccountBalanceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAccountBalance not implemented")
+}
+func (UnimplementedSolanaServiceServer) GetSlotLeader(*GetSlotLeaderRequest, grpc.ServerStreamingServer[GetSlotLeaderResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method GetSlotLeader not implemented")
 }
 func (UnimplementedSolanaServiceServer) mustEmbedUnimplementedSolanaServiceServer() {}
 func (UnimplementedSolanaServiceServer) testEmbeddedByValue()                       {}
@@ -142,6 +167,17 @@ func _SolanaService_GetAccountBalance_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SolanaService_GetSlotLeader_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetSlotLeaderRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(SolanaServiceServer).GetSlotLeader(m, &grpc.GenericServerStream[GetSlotLeaderRequest, GetSlotLeaderResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type SolanaService_GetSlotLeaderServer = grpc.ServerStreamingServer[GetSlotLeaderResponse]
+
 // SolanaService_ServiceDesc is the grpc.ServiceDesc for SolanaService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -158,6 +194,12 @@ var SolanaService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SolanaService_GetAccountBalance_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GetSlotLeader",
+			Handler:       _SolanaService_GetSlotLeader_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/solana.proto",
 }

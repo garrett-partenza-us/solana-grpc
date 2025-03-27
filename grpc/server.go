@@ -1,6 +1,7 @@
 package grpc
 
 import (
+	"io"
 	"context"
 
 	"github.com/garrett-partenza-us/solana-grpc/methods"
@@ -27,4 +28,21 @@ func (s *Server) GetAccountBalance(ctx context.Context, in *proto.GetAccountBala
 		Value: jsonResponse.Result.Value,
 	}, nil
 
+}
+
+func (s *Server) GetSlotLeader(in *proto.GetSlotLeaderRequest, stream proto.SolanaService_GetSlotLeaderServer) error {
+	for {
+		jsonResponse := methods.GetSlotLeaderJSONRPC()
+		response := &proto.GetSlotLeaderResponse {
+			Pubkey: jsonResponse.Result,
+		}
+
+		if err := stream.Send(response); err != nil {
+			if err == io.EOF {
+				break
+			}
+			return err
+		}
+	}
+	return nil
 }
